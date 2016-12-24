@@ -1,0 +1,1 @@
+Install http-server and run it on the project folder to see the fireworks in action!
