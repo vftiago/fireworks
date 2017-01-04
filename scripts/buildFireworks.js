@@ -2,6 +2,7 @@
         function buildFireworks(xmlData) {
 
         app.fireworksArray = [];
+        app.particlesArray = [];
         var offsetX = 512;
         var offsetY = 384;
         // create array from loaded xml data
@@ -22,7 +23,6 @@
             var particle = new app.Particle( settings );
 
             app.fireworksArray.push( particle );
-
 
             // build rockets
             // if (xmlData[i].attributes.type === 'Rocket') {
@@ -50,15 +50,48 @@
             // }
         }
 
-        // for (var firework = 0; firework < app.fireworksArray.length; firework++) {
-        //     if ( firework.type === 'Rocket' ) {
-        //         var settings = {
-                    
-        //         }
-        //     } else if ( firework.type === 'Fountain' ) {
+        app.fireworksArray.forEach( function( firework ) {
+            switch( firework.type ) {
+                case 'Fountain':
+                    // var settings = {
 
-        //     }
+                    // };
+                    // var particle = new app.Particle( settings );
+                    // app.particlesArray.push( particle )
+                    break;
+                case 'Rocket':
+                    var angle = Math.random() * Math.PI * 2;
+                    var speed = Math.cos(Math.random() * Math.PI / 2) * 88;
+
+                    var settings = {
+                        birthDate: firework.birthDate,
+                        begin: firework.begin + firework.duration,
+                        type: 'Particle',
+                        color: firework.color,
+                        begin: firework.begin + firework.duration,
+                        duration: 4000,
+                        xPos: firework.position.x + firework.velocity.x * firework.duration / 1000,
+                        yPos: firework.position.y + firework.velocity.y * firework.duration / 1000,
+                        xSpeed: Math.cos(angle) * speed,
+                        ySpeed: Math.sin(angle) * speed,
+                        isActive: false,
+                        flick: true
+                    }
+
+                    var particle = new app.Particle( settings );
+                    app.particlesArray.push( particle );
+                    break;
+                default:
+                    break;
+            }
+        } );
+
+        // for (var firework = 0; firework < app.fireworksArray.length; firework++) {
+
         // }
+
+        console.log(app.particlesArray)
+
 
         app.mainLoop();
     }

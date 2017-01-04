@@ -1,5 +1,6 @@
 var app = app || {};
 var libs = libs || {};
+
 var globalSettings = {
     loopDelay: 3000,
     canvasWidth: 1024,
@@ -15,7 +16,6 @@ var globalSettings = {
     gravity: 0.8,
     airResistance: 0.997
 }
-
 
 // set size of and append canvas
 var canvas = document.createElement('canvas');

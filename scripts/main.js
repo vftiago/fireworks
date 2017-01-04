@@ -12,6 +12,11 @@
             particle.update( timenow );
             particle.draw(c);
         } );
+        
+        app.particlesArray.forEach( function( particle ) {
+            particle.update( timenow );
+            particle.draw(c);
+        } );
     }
 
     // this.animationLoop = function () {

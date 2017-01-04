@@ -19,7 +19,6 @@
             x: settings.xSpeed,
             y: settings.ySpeed
         };
-        console.warn(settings)
         this.isActive = false;
         this.isAlive = true;
         this.deathDate = this.birthDate + this.begin + this.duration;
