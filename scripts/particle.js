@@ -20,18 +20,21 @@
             y: settings.ySpeed
         };
         this.isActive = false;
-        this.isAlive = true;
         this.deathDate = this.birthDate + this.begin + this.duration;
         this.lastUpdate = this.birthDate + this.begin;
     }
-
-    Particle.prototype.activate = function() {
-        this.isActive = true;
-    };
-
+    
     Particle.prototype.canDraw = function() {
         return this.isActive;
     };
+        
+    Particle.prototype.canUpdate = function() {
+        return this.isAlive;
+    };
+
+    Particle.prototype.getCurrentPosition = function() {
+        return this.position;
+    }
 
     Particle.prototype.update = function( timenow ) {
         var elapsedTime = timenow - this.birthDate;
@@ -39,13 +42,13 @@
 
         this.lastUpdate = timenow;
 
-        if ( this.isAlive && ( elapsedTime > this.begin ) ) {
+        if ( ( elapsedTime > this.begin ) ) {
             this.isActive = true;
         }
-        if ( ( timenow > this.deathDate ) || ( this.particleSize < globalSettings.particleMinSize ) ) {
-            this.isAlive = false;
+        if ( elapsedTime > this.begin + this.duration ) {
+            this.isActive = false;
         }
-        if (!this.isActive || !this.isAlive ) {
+        if ( !this.canDraw() ) {
             return;
         }
 
@@ -56,28 +59,6 @@
         this.position.y -= (this.velocity.y * delta / 1000 ) - globalSettings.gravity;
         this.particleSize *= globalSettings.shrinkFactor;
     };
-
-    // Rocket.prototype.generateParticles = function() {
-    //     // var pos = {
-    //     //     x: this.pos.x + this.vel.x,
-    //     //     y: this.pos.y - this.vel.y
-    //     // }
-
-    //     for (var i = 0; i < this.count; i++) {
-
-    //         var particle = new Particle(this.begin + this.duration, 4000, pos);
-
-    //         var angle = Math.random() * Math.PI * 2;
-    //         var speed = Math.cos(Math.random() * Math.PI / 2) * settings.rocketSpeed;
-
-    //         particle.isActive = false;
-    //         particle.vel.x = Math.cos(angle) * speed;
-    //         particle.vel.y = Math.sin(angle) * speed;
-    //         particle.flick = true;
-    //         particle.color = this.color;
-    //         this.particles.push(particle);
-    //     }
-    // }
 
     // Fountain.prototype.generateParticles = function() {
     //     // var pos = {
@@ -102,10 +83,6 @@
     //         this.particles.push(particle);
     //     }
     // }
-
-    Particle.prototype.generateParticles = function() {
-
-    }
 
     Particle.prototype.draw = function(c) {
         if (!this.canDraw()) {
