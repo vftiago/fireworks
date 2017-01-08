@@ -7,14 +7,14 @@ var globalSettings = {
     canvasHeight: 768,
     particlesPerFountain: 100,
     particlesPerRocket: 120,
-    fountainSpeed: 120,
+    fountainSpeed: 80,
     fountainSpread: 0.2,
     rocketSpeed: 88,
     particleSize: 6,
     shrinkFactor: 0.97,
     particleMinSize: 0.02,
-    gravity: 0.8,
-    airResistance: 0.997
+    gravity: 0,
+    airResistance: 1
 }
 
 // set size of and append canvas
