@@ -30,7 +30,7 @@
                         obj[nodeName] = [];
                         obj[nodeName].push(old);
                     }
-                    obj[nodeName].push(xmlToJson(item));
+                    obj[nodeName].push( xmlToJson( item ) );
                 }
             }
         }

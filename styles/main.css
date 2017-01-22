@@ -1,10 +1,10 @@
 body {
-    margin: 0;
-    overflow: hidden;
-    background-color: black;
+    background: black;
 }
 
-canvas {
-    height: 100%;
-    width: 100%;
+#container {
+    position: relative;
+    height: 768px;
+    width: 1024px;
+    margin: auto;
 }

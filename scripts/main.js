@@ -1,4 +1,4 @@
-(function (app) {
+(function () {
     var that = this;
 
     function clearContext() {
@@ -6,26 +6,32 @@
         c.fillRect(0, 0, globalSettings.canvasWidth, globalSettings.canvasHeight);
     }
 
-    function drawFrame() {
-        var timenow = +new Date();
-        app.fireworksArray.forEach( function( particle ) {
-            particle.update( timenow );
-            particle.draw(c);
-        } );
-        
+    function drawFrame() {    
         app.particlesArray.forEach( function( particle ) {
-            particle.update( timenow );
+            particle.update();
             particle.draw(c);
         } );
     }
 
-    // this.animationLoop = function () {
-    //     mainLoop();
+    // function reset() {
+    //     app.birth = +new Date();
+    //     app.death = +new Date() + globalSettings.lifeTime;
+    //     app.timeNow = null;
+    //     app.particlesArray.forEach( function( particle ) {
+    //         particle.reset();
+    //     } );
     // }
 
     function mainLoop() {
+        
+        app.lastUpdate = app.timeNow || null;
+        app.timeNow = +new Date();
+        app.elapsedTime = app.timeNow - app.birth;
+        app.delta = app.lastUpdate ? ( app.timeNow - app.lastUpdate ) : null;
+
         clearContext();
         window.requestAnimFrame(function() {
+            console.warn(app.elapsedTime, app.delta);
             mainLoop();
         });
         drawFrame();
@@ -33,5 +39,6 @@
 
     app.mainLoop = mainLoop;
 
-})(app);
+})();
 
+window.onload = app.init;

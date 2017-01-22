@@ -1,29 +1,30 @@
 // particle constructor
+
 (function(app) {
 
     function Particle( overrideSettings ) {
-        var settings = Object.assign( globalSettings, overrideSettings )
+        this.settings = Object.assign( globalSettings, overrideSettings )
+        this.reset();
+    };
 
-        // settings variables
-        this.type = settings.type;
-        this.birthDate = settings.birthDate;
-        this.begin = settings.begin;
-        this.color = settings.color;
-        this.duration = settings.duration;
-        this.particleSize = settings.particleSize;
+    Particle.prototype.reset = function() {
+        this.isActive = false;
+        this.flick = true;
+        this.type = this.settings.type;
+        this.begin = this.settings.begin;
+        this.color = this.settings.color;
+        this.duration = this.settings.duration;
+        this.particleSize = this.settings.particleSize;
         this.position = {
-            x: settings.xPos,
-            y: settings.yPos
+            x: this.settings.xPos,
+            y: this.settings.yPos
         };
         this.velocity = {
-            x: settings.xSpeed,
-            y: settings.ySpeed
+            x: this.settings.xSpeed,
+            y: this.settings.ySpeed
         };
-        this.isActive = false;
-        this.deathDate = this.birthDate + this.begin + this.duration;
-        this.lastUpdate = this.birthDate + this.begin;
-    }
-    
+    };
+
     Particle.prototype.canDraw = function() {
         return this.isActive;
     };
@@ -34,55 +35,29 @@
 
     Particle.prototype.getCurrentPosition = function() {
         return this.position;
-    }
+    };
 
     Particle.prototype.update = function( timenow ) {
-        var elapsedTime = timenow - this.birthDate;
-        var delta = timenow - this.lastUpdate;
-
-        this.lastUpdate = timenow;
-
-        if ( ( elapsedTime > this.begin ) ) {
+        if ( ( app.elapsedTime > this.begin ) ) {
             this.isActive = true;
         }
-        if ( elapsedTime > this.begin + this.duration ) {
+        if ( app.elapsedTime > this.begin + this.duration ) {
             this.isActive = false;
         }
         if ( !this.canDraw() ) {
             return;
         }
 
-        // update position
-        this.velocity.x *= globalSettings.airResistance;
-        this.velocity.y *= globalSettings.airResistance;
-        this.position.x += this.velocity.x * delta / 1000;
-        this.position.y -= (this.velocity.y * delta / 1000 ) - globalSettings.gravity;
-        this.particleSize *= globalSettings.shrinkFactor;
+        if ( app.delta < 50 ) {
+                // update position
+                this.velocity.x *= globalSettings.airResistance;
+                this.velocity.y *= globalSettings.airResistance;
+                this.position.x += this.velocity.x * app.delta / 1000;
+                this.position.y -= (this.velocity.y * app.delta / 1000 ) - globalSettings.gravity;
+                this.particleSize *= globalSettings.shrinkFactor;
+        }
+
     };
-
-    // Fountain.prototype.generateParticles = function() {
-    //     // var pos = {
-    //     //     x: this.pos.x + this.vel.x * this.duration / 1000,
-    //     //     y: this.pos.y - this.vel.y * this.duration / 1000
-    //     // }
-
-    //     for (var i = 0; i < this.count; i++) {
-
-    //         var fountainParticleBegin = Math.random() * this.fountainDuration + this.begin;
-    //         var fountainParticleDuration = this.fountainDuration + this.begin - fountainParticleBegin;
-
-    //         var particle = new Particle(fountainParticleBegin, fountainParticleDuration, pos);
-    //         var angle = Math.random() * Math.PI * 2;
-
-    //         particle.isActive = false;
-    //         particle.vel.y = Math.abs(Math.sin(angle) * settings.fountainSpeed);
-    //         particle.vel.x = (Math.random() * 2 - 1) * settings.fountainSpread * Math.random() * particle.vel.y;
-
-    //         particle.flick = true;
-    //         particle.color = this.color;
-    //         this.particles.push(particle);
-    //     }
-    // }
 
     Particle.prototype.draw = function(c) {
         if (!this.canDraw()) {
